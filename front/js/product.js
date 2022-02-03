@@ -30,22 +30,26 @@ fetch("http://localhost:3000/api/products/" + products)
     });
 
     const panier = (addToCart.onclick = () => {
-      console.log(products);
-      localStorage.setItem("id", products);
+      /*console.log(products);
+      localStorage.setItem("id", products);*/
 
-      const quantityLs = document.getElementById("quantity").value;
-      console.log(quantityLs);
-      localStorage.setItem("quantity", quantityLs);
+      const quantityLs = parseInt(document.getElementById("quantity").value);
+      /*console.log(quantityLs);
+      localStorage.setItem("quantity", quantityLs);*/
 
       const colorsLs = document.getElementById("colors").value;
-      console.log(colorsLs);
+      /*console.log(colorsLs);
 
-      localStorage.setItem("couleur", colorsLs);
+      localStorage.setItem("couleur", colorsLs);*/
 
       var canap = {
         id: products,
         quantity: quantityLs,
         colors: colorsLs,
+        name: product.name,
+        image: product.imageUrl,
+        alt: product.altTxt,
+        price: product.price,
       };
       console.log(canap);
 

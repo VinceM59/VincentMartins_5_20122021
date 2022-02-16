@@ -8,8 +8,3 @@ function commande() {
   bilan.innerHTML = orderId;
 }
 commande();
-
-// let url = new url(window.location.href);
-// let orderId = url.searchParams.get("orderId");
-// let confirmOrderId = document.getElementById("orderId");
-// confirmOrderId.innerHTML = orderId;

@@ -210,9 +210,100 @@ function renseignements() {
 }
 renseignements();
 
-function validation() {
-  let commande = document.getElementById("order");
-  commande.addEventListener("click", (event) => {
-    console.log("salut");
+/*afficherFormulaireHtml();*/
+function formPost() {
+  const btnForm = document.getElementById("order");
+
+  btnForm.addEventListener("click", (event) => {
+    console.log("CLICK sur le boutton");
+    let postFirstName = document.getElementById("firstName");
+    let postLastName = document.getElementById("lastName");
+    let postAddress = document.getElementById("address");
+    let postCity = document.getElementById("city");
+    let postEmail = document.getElementById("email");
+
+    let products = [];
+    for (let p = 0; p < produitLocalStorage.length; p++) {
+      products.push(produitLocalStorage[p].id);
+    }
+    console.log("products");
+    console.log(products);
+
+    const order = {
+      contact: {
+        firstName: postFirstName.value,
+        lastName: postLastName.value,
+        address: postAddress.value,
+        city: postCity.value,
+        email: postEmail.value,
+      },
+      products,
+    };
+    console.log("Order à envoyer : ");
+    console.log(order);
+    if (
+      postFirstName.value === "" ||
+      postLastName.value === "" ||
+      postAddress.value === "" ||
+      postCity.value === "" ||
+      postEmail.value === ""
+    ) {
+      window.confirm("champs manquant !!");
+      window.onbeforeunload;
+    } else {
+      const promise = fetch("http://localhost:3000/api/products/order", {
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(order),
+      })
+        .then((response) => response.json())
+        .then((end) => {
+          console.log("On reçoit la réponse de l'API : ");
+          console.log(end);
+          localStorage.setItem("produit", "[]");
+          document.location = "confirmation.html?orderId=" + end.orderId;
+        });
+      /*fetch("http://localhost:3000/api/products/order", {
+        metthod: "post",
+        Headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(order),
+      })
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          window.location.href = `confirmation.html?orderId=${data.orderId}`;
+        })
+        .catch((error) => {
+          alert(error);
+        });*/
+
+      // const options = {
+      //   metthod: "post",
+      //   body: JSON.stringify(order),
+      //   Headers: {
+      //     Accept: "application/json",
+      //     "Content-Type": "application/json",
+      //   },
+      // };
+      // fetch("http://localhost:3000/api/products/order", options)
+      //   .then((response) => response.json())
+      //   .then((end) => {
+      //     console.log("data");
+      //     console.log(data);
+      //     localStorage.clear();
+      //     document.location = "confirmation.html?orderId" + end.orderId;
+      //   })
+      //   .catch((err) => {
+      //     alert("problème avec fetch : " + err.message);
+      //   });
+    }
   });
 }
+formPost();

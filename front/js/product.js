@@ -56,6 +56,11 @@ fetch("http://localhost:3000/api/products/" + products)
       let produitLocalStorage = JSON.parse(localStorage.getItem("produit"));
       console.log(produitLocalStorage);
 
+      const confirmation = () => {
+        if (window.alert("Produit ajouté au panier")) {
+          window.location.href = "cart.html";
+        }
+      };
       if (produitLocalStorage) {
         const resultFind = produitLocalStorage.find(
           (el) => el.id === products && el.colors === colorsLs
@@ -67,16 +72,19 @@ fetch("http://localhost:3000/api/products/" + products)
           resultFind.quantity = newQuantite;
           localStorage.setItem("produit", JSON.stringify(produitLocalStorage));
           console.table(produitLocalStorage);
+          confirmation();
         } else {
           produitLocalStorage.push(canap);
           localStorage.setItem("produit", JSON.stringify(produitLocalStorage));
           console.table(produitLocalStorage);
+          confirmation();
         }
       } else {
         produitLocalStorage = [];
         produitLocalStorage.push(canap);
         localStorage.setItem("produit", JSON.stringify(produitLocalStorage));
         console.table(produitLocalStorage);
+        confirmation();
       }
     });
   });

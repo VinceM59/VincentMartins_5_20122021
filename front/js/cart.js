@@ -216,6 +216,7 @@ function formPost() {
 
   btnForm.addEventListener("click", (event) => {
     console.log("CLICK sur le boutton");
+    console.log("salut");
     let postFirstName = document.getElementById("firstName");
     let postLastName = document.getElementById("lastName");
     let postAddress = document.getElementById("address");

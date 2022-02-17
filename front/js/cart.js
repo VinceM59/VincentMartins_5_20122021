@@ -117,6 +117,14 @@ changeButton();
 function renseignements() {
   let formulaire = document.querySelector(".cart__order__form");
 
+  let emailReg = new RegExp(
+    "^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$"
+  );
+  let nameReg = new RegExp("^[a-zA-Z ,.'-]+$");
+  let addressReg = new RegExp(
+    "^[0-9]{1,3}(?:(?:[,. ]){1}[-a-zA-Zàâäéèêëïîôöùûüç]+)+"
+  );
+
   //écouter la modification du prénom
   formulaire.firstName.addEventListener("change", function () {
     valideFirstName(this);
@@ -144,37 +152,29 @@ function renseignements() {
 
   const valideFirstName = function (inputFirstName) {
     //creation de la reg exp pour la validation du prénom
-    let firstNameRegExp = new RegExp("^[a-zA-Z][0-9a-zA-Z .,'-]*$", "g");
-    let testFirstName = firstNameRegExp.test(inputFirstName.value);
+
     let firstNameErrorMsg = inputFirstName.nextElementSibling;
-    if (testFirstName) {
+    if (nameReg.test(inputFirstName.value)) {
       firstNameErrorMsg.innerHTML = "";
     } else {
-      firstNameErrorMsg.innerHTML = "erreur";
+      firstNameErrorMsg.innerHTML = "Veuillez renseigner ce champ.";
     }
   };
 
   const valideLastName = function (inputLastName) {
     //creation de la reg exp pour la validation du nom
-    let lastNameRegExp = new RegExp("^[a-zA-Z][0-9a-zA-Z .,'-]*$", "g");
-    let testLastName = lastNameRegExp.test(inputLastName.value);
     let lastNameErrorMsg = inputLastName.nextElementSibling;
-    if (testLastName) {
+    if (nameReg.test(inputLastName.value)) {
       lastNameErrorMsg.innerHTML = "";
     } else {
-      lastNameErrorMsg.innerHTML = "erreur";
+      lastNameErrorMsg.innerHTML = "Veuillez renseigner ce champ.";
     }
   };
 
   const valideAddress = function (inputAddress) {
     //creation de la reg exp pour la validation du nom
-    let addressRegExp = new RegExp(
-      "[0-9]{1,3}(?:(?:[,. ]){1}[-a-zA-Zàâäéèêëïîôöùûüç]+)+",
-      "g"
-    );
-    let testAddress = addressRegExp.test(inputAddress.value);
     let addressErrorMsg = inputAddress.nextElementSibling;
-    if (testAddress) {
+    if (addressReg.test(inputAddress.value)) {
       addressErrorMsg.innerHTML = "";
     } else {
       addressErrorMsg.innerHTML = "Addresse non valide";
@@ -183,10 +183,8 @@ function renseignements() {
 
   const valideCity = function (inputCity) {
     //creation de la reg exp pour la validation dde la ville
-    let cityRegExp = new RegExp("^[a-zA-Z][0-9a-zA-Z .,'-]*$", "g");
-    let testCity = cityRegExp.test(inputCity.value);
     let cityErrorMsg = inputCity.nextElementSibling;
-    if (testCity) {
+    if (nameReg.test(inputCity.value)) {
       cityErrorMsg.innerHTML = "";
     } else {
       cityErrorMsg.innerHTML = "Ville non valide";
@@ -195,13 +193,8 @@ function renseignements() {
 
   const valideEmail = function (inputEmail) {
     //creation de la reg exp pour la validation email
-    let emailRegExp = new RegExp(
-      "^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$",
-      "g"
-    );
-    let testEmail = emailRegExp.test(inputEmail.value);
     let emailErrorMsg = inputEmail.nextElementSibling;
-    if (testEmail) {
+    if (emailReg.test(inputEmail.value)) {
       emailErrorMsg.innerHTML = "";
     } else {
       emailErrorMsg.innerHTML = "Adresse non valide";
@@ -242,69 +235,74 @@ function formPost() {
     };
     console.log("Order à envoyer : ");
     console.log(order);
-    if (
-      postFirstName.value === "" ||
-      postLastName.value === "" ||
-      postAddress.value === "" ||
-      postCity.value === "" ||
-      postEmail.value === ""
-    ) {
-      window.confirm("champs manquant !!");
-      window.onbeforeunload;
-    } else {
-      const promise = fetch("http://localhost:3000/api/products/order", {
-        method: "post",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(order),
-      })
-        .then((response) => response.json())
-        .then((end) => {
-          console.log("On reçoit la réponse de l'API : ");
-          console.log(end);
-          localStorage.setItem("produit", "[]");
-          document.location = "confirmation.html?orderId=" + end.orderId;
-        });
-      /*fetch("http://localhost:3000/api/products/order", {
-        metthod: "post",
-        Headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(order),
-      })
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          window.location.href = `confirmation.html?orderId=${data.orderId}`;
-        })
-        .catch((error) => {
-          alert(error);
-        });*/
-
-      // const options = {
-      //   metthod: "post",
-      //   body: JSON.stringify(order),
-      //   Headers: {
-      //     Accept: "application/json",
-      //     "Content-Type": "application/json",
-      //   },
-      // };
-      // fetch("http://localhost:3000/api/products/order", options)
-      //   .then((response) => response.json())
-      //   .then((end) => {
-      //     console.log("data");
-      //     console.log(data);
-      //     localStorage.clear();
-      //     document.location = "confirmation.html?orderId" + end.orderId;
-      //   })
-      //   .catch((err) => {
-      //     alert("problème avec fetch : " + err.message);
-      //   });
-    }
+    // if (
+    //   postFirstName.value === "" ||
+    //   postLastName.value === "" ||
+    //   postAddress.value === "" ||
+    //   postCity.value === "" ||
+    //   postEmail.value === ""
+    // ) {
+    //   window.confirm("champs manquant !!");
+    //   window.onbeforeunload;
+    // } else {
+    fetch("http://localhost:3000/api/products/order", {
+      method: `POST`,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(order),
+    })
+      .then((response) => response.json())
+      .then((conf) => {
+        console.log("On reçoit la réponse de l'API : ");
+        console.log(conf);
+        window.location.href = "confirmation.html?orderId=" + conf.orderId;
+        localStorage.clear();
+      });
+    // .catch((error) => {
+    //   alert(error);
+    //   window.location.reload();
+    // });
+    //}
   });
 }
 formPost();
+
+/*fetch("http://localhost:3000/api/products/order", {
+    metthod: "post",
+    Headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(order),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      window.location.href = `confirmation.html?orderId=${data.orderId}`;
+    })
+    .catch((error) => {
+      alert(error);
+    });*/
+
+// const options = {
+//   metthod: "post",
+//   body: JSON.stringify(order),
+//   Headers: {
+//     Accept: "application/json",
+//     "Content-Type": "application/json",
+//   },
+// };
+// fetch("http://localhost:3000/api/products/order", options)
+//   .then((response) => response.json())
+//   .then((end) => {
+//     console.log("data");
+//     console.log(data);
+//     localStorage.clear();
+//     document.location = "confirmation.html?orderId" + end.orderId;
+//   })
+//   .catch((err) => {
+//     alert("problème avec fetch : " + err.message);
+//   });

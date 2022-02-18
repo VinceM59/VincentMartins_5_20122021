@@ -38,6 +38,20 @@ fetch("http://localhost:3000/api/products/" + products)
       const quantityLs = parseInt(document.getElementById("quantity").value);
       const colorsLs = document.getElementById("colors").value;
 
+      // Si aucune couleur n'est sélectionnée
+      if (colorsLs == "") {
+        alert("Veuillez sélectionner une couleur");
+        return;
+      }
+
+      // Si la quantité est égale à 0
+      if (quantityLs == 0) {
+        alert("Veuillez sélectionner une quantité");
+        return;
+      } else if (quantityLs > 100) {
+        alert("La quantité maximale autorisée est de 100 unités");
+        return;
+      }
       // récupération des options du produit
       var canap = {
         id: products,

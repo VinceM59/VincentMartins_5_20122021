@@ -41,7 +41,6 @@ if (produitLocalStorage === null || produitLocalStorage == 0) {
               </article> `;
     positionCommande.innerHTML = structureProduitPanier;
   }
-  /*});*/
 }
 
 function displayTotal() {
@@ -105,6 +104,11 @@ function changeButton() {
         ) {
           produitLocalStorage[k].quantity = quantity;
           break;
+        }
+        if (quantity > 100) {
+          alert("La quantité maximale autorisée est de 100 unités");
+          location.reload();
+          return;
         }
       }
       localStorage.setItem("produit", JSON.stringify(produitLocalStorage));
@@ -208,6 +212,7 @@ function formPost() {
   const btnForm = document.getElementById("order");
 
   btnForm.addEventListener("click", (event) => {
+    event.preventDefault();
     console.log("CLICK sur le boutton");
     console.log("salut");
     let postFirstName = document.getElementById("firstName");
@@ -235,36 +240,37 @@ function formPost() {
     };
     console.log("Order à envoyer : ");
     console.log(order);
-    // if (
-    //   postFirstName.value === "" ||
-    //   postLastName.value === "" ||
-    //   postAddress.value === "" ||
-    //   postCity.value === "" ||
-    //   postEmail.value === ""
-    // ) {
-    //   window.confirm("champs manquant !!");
-    //   window.onbeforeunload;
-    // } else {
-    fetch("http://localhost:3000/api/products/order", {
-      method: `POST`,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(order),
-    })
-      .then((response) => response.json())
-      .then((conf) => {
-        console.log("On reçoit la réponse de l'API : ");
-        console.log(conf);
-        window.location.href = "confirmation.html?orderId=" + conf.orderId;
-        localStorage.clear();
-      });
-    // .catch((error) => {
-    //   alert(error);
-    //   window.location.reload();
-    // });
-    //}
+
+    if (
+      postFirstName.value === "" ||
+      postLastName.value === "" ||
+      postAddress.value === "" ||
+      postCity.value === "" ||
+      postEmail.value === ""
+    ) {
+      window.confirm("champs manquant !!");
+      window.onbeforeunload;
+    } else {
+      fetch("http://localhost:3000/api/products/order", {
+        method: `POST`,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(order),
+      })
+        .then((response) => response.json())
+        .then((conf) => {
+          console.log("On reçoit la réponse de l'API : ");
+          console.log(conf);
+          window.location.href = "confirmation.html?orderId=" + conf.orderId;
+          localStorage.clear();
+        })
+        .catch((error) => {
+          alert(error);
+          window.location.reload();
+        });
+    }
   });
 }
 formPost();

@@ -164,7 +164,8 @@ function renseignements() {
     if (nameReg.test(inputFirstName.value)) {
       firstNameErrorMsg.innerHTML = "";
     } else {
-      firstNameErrorMsg.innerHTML = "Veuillez renseigner ce champ.";
+      firstNameErrorMsg.innerHTML =
+        "Veuillez renseigner correctement ce champ.";
     }
   };
 
@@ -174,7 +175,7 @@ function renseignements() {
     if (nameReg.test(inputLastName.value)) {
       lastNameErrorMsg.innerHTML = "";
     } else {
-      lastNameErrorMsg.innerHTML = "Veuillez renseigner ce champ.";
+      lastNameErrorMsg.innerHTML = "Veuillez renseigner correctement ce champ.";
     }
   };
 
